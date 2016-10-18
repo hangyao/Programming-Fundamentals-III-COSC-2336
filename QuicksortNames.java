@@ -17,6 +17,7 @@ public class QuicksortNames {
         // Define the data file to be read. 
         String fileName = "names.dat";
         ArrayList<String> nameList = new ArrayList<String>();
+        String input; // To hold user input string
         
         // Read the data from file.
         try {
@@ -61,6 +62,21 @@ public class QuicksortNames {
         }
         JOptionPane.showMessageDialog(null, output);
         
+        // Input the name to search
+        input = JOptionPane.showInputDialog("Enter a name to search.");
+        while ((input != null) && (input.length() > 0)) {
+            input = input.toUpperCase();
+            // Binary Search is the most efficient search method for a sorted array.
+            int result = binSearch(nameList, 0, nameList.size() - 1, input);
+            if (result != -1)
+                JOptionPane.showMessageDialog(null, "The name " + input + 
+                        " has been found in the list.\n" + "It is #" + result +
+                        " in the list.");
+            else
+                JOptionPane.showMessageDialog(null, "The name " + input + 
+                        " is NOT in the list.");
+            input = JOptionPane.showInputDialog("Enter another name to search.");
+        }
         System.exit(0);
     }
     
@@ -158,5 +174,27 @@ public class QuicksortNames {
         temp = nameList.get(a);
         nameList.set(a, nameList.get(b));
         nameList.set(b, temp);
+    }
+    
+    /**
+     * The binSearch method binary search the name in a sorted nameList from 
+     * lower to upper.
+     * @param nameList The ArrayList containing the elements.
+     * @param lower The lower end of the search range.
+     * @param upper The upper end of the search range.
+     * @param name The name to be searched.
+     * @return the index of name or -1 if not found.
+     */
+    private static int binSearch(ArrayList<String> nameList, 
+            int lower, int upper, String name) {
+        if (lower > upper)
+            return -1;
+        int middle = (lower + upper) / 2;
+        if (nameList.get(middle).compareTo(name) == 0)
+            return middle;
+        if (nameList.get(middle).compareTo(name) < 0)
+            return binSearch(nameList, middle + 1, upper, name);
+        else
+            return binSearch(nameList, lower, middle - 1, name);
     }
 }
